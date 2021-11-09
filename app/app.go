@@ -18,6 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
+	st "github.com/cosmos/cosmos-sdk/store"
 	store "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -103,6 +104,16 @@ import (
 	routerkeeper "github.com/strangelove-ventures/packet-forward-middleware/router/keeper"
 	routertypes "github.com/strangelove-ventures/packet-forward-middleware/router/types"
 
+	aguaclaramodule "github.com/Electronic-Signatures-Industries/ancon-protocol/x/aguaclara"
+	aguaclaramoduletypes "github.com/Electronic-Signatures-Industries/ancon-protocol/x/aguaclara/types"
+
+	// aguaclaramodulekeeper "github.com/electronic-signatures-Industries/ancon-protocol/x/aguaclara/keeper"
+
+	// this line is used by starport scaffolding # stargate/app/moduleImport
+	"github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol"
+	anconprotocolkeeper "github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol/keeper"
+	anconprotocoltypes "github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol/types"
+
 	// unnamed import of statik for swagger UI support
 	_ "github.com/cosmos/cosmos-sdk/client/docs/statik"
 )
@@ -145,6 +156,8 @@ var (
 		vesting.AppModuleBasic{},
 		liquidity.AppModuleBasic{},
 		router.AppModuleBasic{},
+		anconprotocol.AppModuleBasic{},
+		aguaclaramodule.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -205,6 +218,8 @@ type GaiaApp struct { // nolint: golint
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
+	AnconprotocolKeeper anconprotocolkeeper.Keeper
+
 	// the module manager
 	mm *module.Manager
 
@@ -240,9 +255,11 @@ func NewGaiaApp(
 	interfaceRegistry := encodingConfig.InterfaceRegistry
 
 	bApp := baseapp.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
+	cms := st.NewCommitMultiStore(db)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetVersion(version.Version)
 	bApp.SetInterfaceRegistry(interfaceRegistry)
+	iavlStoreKey := sdk.NewKVStoreKey(anconprotocoltypes.StoreKey)
 
 	keys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey, banktypes.StoreKey, stakingtypes.StoreKey,
@@ -250,6 +267,7 @@ func NewGaiaApp(
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, liquiditytypes.StoreKey, ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey, feegrant.StoreKey, authzkeeper.StoreKey, routertypes.StoreKey,
+		aguaclaramoduletypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -334,6 +352,19 @@ func NewGaiaApp(
 		authtypes.FeeCollectorName,
 		app.ModuleAccountAddrs(),
 	)
+	app.AnconprotocolKeeper = anconprotocolkeeper.NewKeeper(
+		appCodec,
+		//keys[anconprotocoltypes.StoreKey],
+		iavlStoreKey,
+		keys[anconprotocoltypes.MemStoreKey],
+		app.GetSubspace(anconprotocoltypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		// app.AguaclaraKeeper,
+		app.ModuleAccountAddrs(),
+		cms,
+	)
+	anconprotocolModule := anconprotocol.NewAppModule(appCodec, app.AnconprotocolKeeper, app.AccountKeeper, app.BankKeeper)
 	app.SlashingKeeper = slashingkeeper.NewKeeper(
 		appCodec,
 		keys[slashingtypes.StoreKey],
@@ -456,6 +487,7 @@ func NewGaiaApp(
 		liquidity.NewAppModule(appCodec, app.LiquidityKeeper, app.AccountKeeper, app.BankKeeper, app.DistrKeeper),
 		transferModule,
 		routerModule,
+		anconprotocolModule,
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -506,6 +538,8 @@ func NewGaiaApp(
 		feegrant.ModuleName,
 		authz.ModuleName,
 		routertypes.ModuleName,
+		anconprotocoltypes.ModuleName,
+		aguaclaramoduletypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -542,6 +576,7 @@ func NewGaiaApp(
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
 	app.MountMemoryStores(memKeys)
+	app.MountStore(iavlStoreKey, sdk.StoreTypeIAVL)
 
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{
@@ -771,6 +806,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(routertypes.ModuleName).WithKeyTable(routertypes.ParamKeyTable())
+	paramsKeeper.Subspace(anconprotocoltypes.ModuleName)
 
 	return paramsKeeper
 }
