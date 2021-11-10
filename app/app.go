@@ -104,11 +104,6 @@ import (
 	routerkeeper "github.com/strangelove-ventures/packet-forward-middleware/router/keeper"
 	routertypes "github.com/strangelove-ventures/packet-forward-middleware/router/types"
 
-	aguaclaramodule "github.com/Electronic-Signatures-Industries/ancon-protocol/x/aguaclara"
-	aguaclaramoduletypes "github.com/Electronic-Signatures-Industries/ancon-protocol/x/aguaclara/types"
-
-	// aguaclaramodulekeeper "github.com/electronic-signatures-Industries/ancon-protocol/x/aguaclara/keeper"
-
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	"github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol"
 	anconprotocolkeeper "github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol/keeper"
@@ -157,7 +152,6 @@ var (
 		liquidity.AppModuleBasic{},
 		router.AppModuleBasic{},
 		anconprotocol.AppModuleBasic{},
-		aguaclaramodule.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -267,7 +261,6 @@ func NewGaiaApp(
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, liquiditytypes.StoreKey, ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey, feegrant.StoreKey, authzkeeper.StoreKey, routertypes.StoreKey,
-		aguaclaramoduletypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -539,7 +532,6 @@ func NewGaiaApp(
 		authz.ModuleName,
 		routertypes.ModuleName,
 		anconprotocoltypes.ModuleName,
-		aguaclaramoduletypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
