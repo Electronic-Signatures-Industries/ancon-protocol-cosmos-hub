@@ -1,5 +1,5 @@
 # Ancon Protocol Cosmos Hub (Gaia) chain build
-![image](https://user-images.githubusercontent.com/964052/
+![image](https://user-images.githubusercontent.com/964052/)
 
 
 ## Running an Ancon Protocol v0.2.4 module with Gaia, Vega testnet
@@ -23,7 +23,7 @@
 3. Initialize
    `gaiad init mynode --chain-id vega-testnet`
 4. Copy `app.toml` and `config.toml` to `.gaia/config`
-5. Extract `gen.bak.zip` to `.gaia/config/genesis.json`
+5. Extract `gen.zip` to `.gaia/config/genesis.json`
 6. Run `gaiad start --x-crisis-skip-assert-invariants`
 
 ### Staking information
