@@ -88,7 +88,7 @@ filter_peers = false
 [rpc]
 
 # TCP or UNIX socket address for the RPC server to listen on
-laddr = "tcp://127.0.0.1:26657"
+laddr = "tcp://127.0.0.1:26659"
 
 # A list of origins a cross-domain request can be executed from
 # Default value '[]' disables cors support
@@ -177,15 +177,13 @@ laddr = "tcp://0.0.0.0:26656"
 # Address to advertise to peers for them to dial
 # If empty, will use the same port as the laddr,
 # and will introspect on the listener or use UPnP
-# to figure out the address. ip and port are required
-# example: 159.89.10.97:26656
+# to figure out the address.
 external_address = ""
 
-# # Comma separated list of seed nodes to connect to
-# seeds = "c36cec90ded95d162b85f8ecd00ecd7c8849ca75@arsiamons.seed.evmos.org:26656"
+# Comma separated list of seed nodes to connect to
 
-# # Comma separated list of nodes to keep persistent connections to
-# persistent_peers = "be7593d1d2cae15a574537f9107f525200824767@194.163.187.94:26656"
+# "e6fab0296c0cc31228756822b15e98cfa84ff97b@p2p.testnet.cosmos.network:31729,64fefc98915aa430417ba893bf13bd8cc101aedf@p2p.testnet.cosmos.network:32073"
+seeds = "99b04a4efd48846f654da25532c85bd1fa6a6a39@198.50.215.1:46656,1edc806e29bfb380dc0298ce4fded8e3e8554e2a@198.50.215.1:36656,66a9e52e207c8257b791ff714d29100813e2fa00@143.244.151.9:26656"
 
 # UPNP port forwarding
 upnp = false

@@ -8,7 +8,7 @@
 # The minimum gas prices a validator is willing to accept for processing a
 # transaction. A transaction's fees must meet the minimum of any denomination
 # specified in this config (e.g. 0.25token1;0.0001token2).
-minimum_gas_prices = "0.001uatom"
+minimum-gas-prices = "0.001uatom"
 
 # default: the last 100 states are kept in addition to every 500th state; pruning at 10 block intervals
 # nothing: all historic states will be saved, nothing will be deleted (i.e. archiving node)
@@ -104,7 +104,7 @@ global-labels = [
 enable = true
 
 # Swagger defines if swagger documentation should automatically be registered.
-swagger = true
+swagger = false
 
 # Address defines the API server to listen on.
 address = "tcp://0.0.0.0:1317"
@@ -122,31 +122,7 @@ rpc-write-timeout = 0
 rpc-max-body-bytes = 1000000
 
 # EnableUnsafeCORS defines if CORS should be enabled (unsafe - use it at your own risk).
-enabled-unsafe-cors = true
-
-###############################################################################
-###                           Rosetta Configuration                         ###
-###############################################################################
-
-[rosetta]
-
-# Enable defines if the Rosetta API server should be enabled.
-enable = false
-
-# Address defines the Rosetta API server to listen on.
-address = ":8080"
-
-# Network defines the name of the blockchain that will be returned by Rosetta.
-blockchain = "app"
-
-# Network defines the name of the network that will be returned by Rosetta.
-network = "network"
-
-# Retries defines the number of retries when connecting to the node before failing.
-retries = 3
-
-# Offline defines if Rosetta server should run in offline mode.
-offline = false
+enabled-unsafe-cors = false
 
 ###############################################################################
 ###                           gRPC Configuration                            ###
@@ -159,22 +135,6 @@ enable = true
 
 # Address defines the gRPC server address to bind to.
 address = "0.0.0.0:9090"
-
-###############################################################################
-###                        gRPC Web Configuration                           ###
-###############################################################################
-
-[grpc-web]
-
-# GRPCWebEnable defines if the gRPC-web should be enabled.
-# NOTE: gRPC must also be enabled, otherwise, this configuration is a no-op.
-enable = true
-
-# Address defines the gRPC-web server address to bind to.
-address = "0.0.0.0:9091"
-
-# EnableUnsafeCORS defines if CORS should be enabled (unsafe - use it at your own risk).
-enable-unsafe-cors = false
 
 ###############################################################################
 ###                        State Sync Configuration                         ###
@@ -190,57 +150,3 @@ snapshot-interval = 0
 
 # snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all).
 snapshot-keep-recent = 2
-
-###############################################################################
-###                             EVM Configuration                           ###
-###############################################################################
-
-[evm]
-
-# Tracer defines the 'vm.Tracer' type that the EVM will use when the node is run in
-# debug mode. To enable tracing use the '--trace' flag when starting your node.
-# Valid types are: json|struct|access_list|markdown
-tracer = "json"
-
-###############################################################################
-###                           JSON RPC Configuration                        ###
-###############################################################################
-
-[json-rpc]
-
-# Enable defines if the gRPC server should be enabled.
-enable = true
-
-# Address defines the EVM RPC HTTP server address to bind to.
-address = "0.0.0.0:8545"
-
-# Address defines the EVM WebSocket server address to bind to.
-ws-address = "0.0.0.0:8546"
-
-# API defines a list of JSON-RPC namespaces that should be enabled
-# Example: "eth,txpool,personal,net,debug,web3"
-api = "eth,net,web3"
-
-# GasCap sets a cap on gas that can be used in eth_call/estimateGas (0=infinite). Default: 25,000,000.
-gas-cap = 25000000
-
-# EVMTimeout is the global timeout for eth_call. Default: 5s.
-evm-timeout = "5s"
-
-# TxFeeCap is the global tx-fee cap for send transaction. Default: 1eth.
-txfee-cap = 1
-
-# FilterCap sets the global cap for total number of filters that can be created
-filter-cap = 200
-
-###############################################################################
-###                             TLS Configuration                           ###
-###############################################################################
-
-[tls]
-
-# Certificate path defines the cert.pem file path for the TLS configuration.
-certificate-path = ""
-
-# Key path defines the key.pem file path for the TLS configuration.
-key-path = ""
