@@ -1,8 +1,8 @@
 # Ancon Protocol Cosmos Hub (Gaia) chain build
-![image](https://user-images.githubusercontent.com/964052/)
 
+<img  src="https://raw.githubusercontent.com/Electronic-Signatures-Industries/ancon-protocol/main/specs/AnconProtocoLogo.jpg" align="center" width="250" />
 
-## Running an Ancon Protocol v0.2.4 module with Gaia, Vega testnet
+## Running an Ancon Protocol v0.2.4 module with Gaia v6.0.0 / Vega testnet
 
 ### Compile
 
