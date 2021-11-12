@@ -8,7 +8,7 @@
 
 > Note: Requires Go 1.17+
 
-1. Download this repository
+1. Clone `https://github.com/Electronic-Signatures-Industries/ancon-protocol-cosmos-hub`
 2. Download Starport
 3. Run `starport chain build`
 4. Copy `go/bin/gaiad` to `/usr/local/bin`
