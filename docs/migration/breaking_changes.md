@@ -377,8 +377,8 @@ sure you are aware of any relevant breaking changes.
     * (client/rpc) [\#6290](https://github.com/cosmos/cosmos-sdk/pull/6290) `client` package and subdirs reorganization.
     * (client/lcd) [\#6290](https://github.com/cosmos/cosmos-sdk/pull/6290) `CliCtx` of struct `RestServer` in package client/lcd has been renamed to `ClientCtx`.
     * (codec) [\#6330](https://github.com/cosmos/cosmos-sdk/pull/6330) `codec.RegisterCrypto` has been moved to the `crypto/codec` package and the global `codec.Cdc` Amino instance has been deprecated and moved to the `codec/legacy_global` package.
-    * (codec) [\#8080](https://github.com/cosmos/cosmos-sdk/pull/8080) Updated the `codec.Marshaler` interface
-        * Moved `MarshalAny` and `UnmarshalAny` helper functions to `codec.Marshaler` and renamed to `MarshalInterface` and
+    * (codec) [\#8080](https://github.com/cosmos/cosmos-sdk/pull/8080) Updated the `codec.Codec` interface
+        * Moved `MarshalAny` and `UnmarshalAny` helper functions to `codec.Codec` and renamed to `MarshalInterface` and
           `UnmarshalInterface` respectively. These functions must take interface as a parameter (not a concrete type nor `Any`
           object). Underneath they use `Any` wrapping for correct protobuf serialization.
     * (crypto) [\#6780](https://github.com/cosmos/cosmos-sdk/issues/6780) Move ledger code to its own package.
@@ -485,7 +485,7 @@ sure you are aware of any relevant breaking changes.
       serialization instead of Amino.
         * The `BaseAccount.PubKey` field is now represented as a Bech32 string instead of a `crypto.Pubkey`.
         * `NewBaseAccountWithAddress` now returns a reference to a `BaseAccount`.
-        * The `x/auth` module now accepts a `Codec` interface which extends the `codec.Marshaler` interface by
+        * The `x/auth` module now accepts a `Codec` interface which extends the `codec.Codec` interface by
           requiring a concrete codec to know how to serialize accounts.
         * The `AccountRetriever` type now accepts a `Codec` in its constructor in order to know how to
           serialize accounts.
@@ -499,12 +499,12 @@ sure you are aware of any relevant breaking changes.
         * `ValidatorSlashEvents` is now a struct with `slashevents`.
         * `ValidatorOutstandingRewards` is now a struct with `rewards`.
         * `ValidatorAccumulatedCommission` is now a struct with `commission`.
-        * The `Keeper` constructor now takes a `codec.Marshaler` instead of a concrete Amino codec. This exact type
+        * The `Keeper` constructor now takes a `codec.Codec` instead of a concrete Amino codec. This exact type
           provided is specified by `ModuleCdc`.
     * (x/evidence) [\#5634](https://github.com/cosmos/cosmos-sdk/pull/5634) Migrate the `x/evidence` module to use Protocol Buffers for state
       serialization instead of Amino.
         * The `internal` sub-package has been removed in order to expose the types proto file.
-        * The module now accepts a `Codec` interface which extends the `codec.Marshaler` interface by
+        * The module now accepts a `Codec` interface which extends the `codec.Codec` interface by
           requiring a concrete codec to know how to serialize `Evidence` types.
         * The `MsgSubmitEvidence` message has been removed in favor of `MsgSubmitEvidenceBase`. The application-level
           codec must now define the concrete `MsgSubmitEvidence` type which must implement the module's `MsgSubmitEvidence`
@@ -515,7 +515,7 @@ sure you are aware of any relevant breaking changes.
         * `MsgSubmitProposal` will be removed in favor of the application-level proto-defined `MsgSubmitProposal` which
           implements the `MsgSubmitProposalI` interface. Applications should extend the `NewMsgSubmitProposalBase` type
           to define their own concrete `MsgSubmitProposal` types.
-        * The module now accepts a `Codec` interface which extends the `codec.Marshaler` interface by
+        * The module now accepts a `Codec` interface which extends the `codec.Codec` interface by
           requiring a concrete codec to know how to serialize `Proposal` types.
     * (x/mint) [\#5634](https://github.com/cosmos/cosmos-sdk/pull/5634) Migrate the `x/mint` module to use Protocol Buffers for state
       serialization instead of Amino.
@@ -523,7 +523,7 @@ sure you are aware of any relevant breaking changes.
     * (x/slashing) [\#5627](https://github.com/cosmos/cosmos-sdk/pull/5627) Migrate the `x/slashing` module to use Protocol Buffers for state
       serialization instead of Amino. The exact codec used is `codec.HybridCodec` which utilizes Protobuf for binary encoding and Amino
       for JSON encoding.
-        * The `Keeper` constructor now takes a `codec.Marshaler` instead of a concrete Amino codec. This exact type
+        * The `Keeper` constructor now takes a `codec.Codec` instead of a concrete Amino codec. This exact type
           provided is specified by `ModuleCdc`.
     * (x/staking) [\#6844](https://github.com/cosmos/cosmos-sdk/pull/6844) Validators are now inserted into the unbonding queue based on their unbonding time and height. The relevant keeper APIs are modified to reflect these changes by now also requiring a height.
     * (x/staking) [\#6061](https://github.com/cosmos/cosmos-sdk/pull/6061) Allow a validator to immediately unjail when no signing info is present due to
@@ -534,7 +534,7 @@ sure you are aware of any relevant breaking changes.
         * `BondStatus` is now of type `int32` instead of `byte`.
         * Types of `int16` in the `Params` type are now of type `int32`.
         * Every reference of `crypto.Pubkey` in context of a `Validator` is now of type string. `GetPubKeyFromBech32` must be used to get the `crypto.Pubkey`.
-        * The `Keeper` constructor now takes a `codec.Marshaler` instead of a concrete Amino codec. This exact type
+        * The `Keeper` constructor now takes a `codec.Codec` instead of a concrete Amino codec. This exact type
           provided is specified by `ModuleCdc`.
     * (x/staking) [\#7979](https://github.com/cosmos/cosmos-sdk/pull/7979) keeper pubkey storage serialization migration
       from bech32 to protobuf.
@@ -542,14 +542,14 @@ sure you are aware of any relevant breaking changes.
     * (x/supply) [\#5533](https://github.com/cosmos/cosmos-sdk/pull/5533) Migrate the `x/supply` module to use Protocol Buffers for state
       serialization instead of Amino.
         * The `internal` sub-package has been removed in order to expose the types proto file.
-        * The `x/supply` module now accepts a `Codec` interface which extends the `codec.Marshaler` interface by
+        * The `x/supply` module now accepts a `Codec` interface which extends the `codec.Codec` interface by
           requiring a concrete codec to know how to serialize `SupplyI` types.
         * The `SupplyI` interface has been modified to no longer return `SupplyI` on methods. Instead the
           concrete type's receiver should modify the type.
     * (x/upgrade) [\#5659](https://github.com/cosmos/cosmos-sdk/pull/5659) Migrate the `x/upgrade` module to use Protocol
       Buffers for state serialization instead of Amino.
         * The `internal` sub-package has been removed in order to expose the types proto file.
-        * The `x/upgrade` module now accepts a `codec.Marshaler` interface.
+        * The `x/upgrade` module now accepts a `codec.Codec` interface.
 
 ## [v0.39.1](https://github.com/cosmos/cosmos-sdk/releases/tag/v0.39.1) - 2020-08-11
 

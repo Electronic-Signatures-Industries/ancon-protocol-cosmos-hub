@@ -10,8 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/cosmos/gaia/v6/x/wasm"
-	wasmclient "github.com/cosmos/gaia/v6/x/wasm/client"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -80,6 +78,8 @@ import (
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	"github.com/cosmos/gaia/v6/x/wasm"
+	wasmclient "github.com/cosmos/gaia/v6/x/wasm/client"
 	"github.com/cosmos/ibc-go/v2/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v2/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v2/modules/apps/transfer/types"
@@ -656,7 +656,7 @@ func NewGaiaApp(
 	app.SetAnteHandler(
 		NewAnteHandler(
 			app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
-			encodingConfig.TxConfig.SignModeHandler(), keys[wasm.StoreKey], app.IBCKeeper.ChannelKeeper, app.FeeGrantKeeper
+			encodingConfig.TxConfig.SignModeHandler(), keys[wasm.StoreKey], app.IBCKeeper.ChannelKeeper, app.FeeGrantKeeper,
 		),
 	)
 	if err != nil {
