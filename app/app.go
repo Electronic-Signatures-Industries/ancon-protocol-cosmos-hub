@@ -34,6 +34,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server/api"
 	"github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
+	st "github.com/cosmos/cosmos-sdk/store"
 	store "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -96,6 +97,12 @@ import (
 
 	// unnamed import of statik for swagger UI support
 	_ "github.com/cosmos/cosmos-sdk/client/docs/statik"
+
+	// this line is used by starport scaffolding # stargate/app/moduleImport
+	"github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol"
+	_ "github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol/keeper"
+	anconprotocolkeeper "github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol/keeper"
+	anconprotocoltypes "github.com/Electronic-Signatures-Industries/ancon-protocol/x/anconprotocol/types"
 )
 
 const appName = "GaiaApp"
@@ -127,6 +134,7 @@ var (
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		liquidity.AppModuleBasic{},
+		anconprotocol.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -183,6 +191,7 @@ type GaiaApp struct { // nolint: golint
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
+	AnconprotocolKeeper  anconprotocolkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -213,6 +222,8 @@ func NewGaiaApp(
 	bApp := baseapp.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetAppVersion(version.Version)
+	cms := st.NewCommitMultiStore(db)
+
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -221,6 +232,8 @@ func NewGaiaApp(
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, liquiditytypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 	)
+	iavlStoreKey := sdk.NewKVStoreKey(anconprotocoltypes.StoreKey)
+
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
@@ -305,6 +318,19 @@ func NewGaiaApp(
 	ibcRouter := porttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
 	app.IBCKeeper.SetRouter(ibcRouter)
+	app.AnconprotocolKeeper = anconprotocolkeeper.NewKeeper(
+		appCodec,
+		//keys[anconprotocoltypes.StoreKey],
+		iavlStoreKey,
+		keys[anconprotocoltypes.MemStoreKey],
+		app.GetSubspace(anconprotocoltypes.ModuleName),
+		app.AccountKeeper,
+		nil,
+		// app.AguaclaraKeeper,
+		app.ModuleAccountAddrs(),
+		cms,
+	)
+	anconprotocolModule := anconprotocol.NewAppModule(appCodec, app.AnconprotocolKeeper, app.AccountKeeper, nil)
 
 	// create evidence keeper with router
 	evidenceKeeper := evidencekeeper.NewKeeper(
@@ -352,6 +378,7 @@ func NewGaiaApp(
 		params.NewAppModule(app.ParamsKeeper),
 		liquidity.NewAppModule(appCodec, app.LiquidityKeeper, app.AccountKeeper, app.BankKeeper, app.DistrKeeper),
 		transferModule,
+		anconprotocolModule,
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -375,6 +402,7 @@ func NewGaiaApp(
 		slashingtypes.ModuleName, govtypes.ModuleName, minttypes.ModuleName, crisistypes.ModuleName,
 		ibchost.ModuleName, genutiltypes.ModuleName, evidencetypes.ModuleName, liquiditytypes.ModuleName,
 		ibctransfertypes.ModuleName,
+		anconprotocoltypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -407,7 +435,7 @@ func NewGaiaApp(
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
 	app.MountMemoryStores(memKeys)
-
+	app.MountStore(iavlStoreKey, sdk.StoreTypeIAVL)
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
@@ -635,6 +663,6 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 	paramsKeeper.Subspace(liquiditytypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
-
+	paramsKeeper.Subspace(anconprotocoltypes.ModuleName)
 	return paramsKeeper
 }
