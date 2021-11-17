@@ -14617,7 +14617,7 @@ paths:
         ElectronicSignaturesIndustriesAnconprotocolAnconprotocolReadSchemaStoreResource
       responses:
         '200':
-          description: A successful response.
+  _TG        description: A successful response.
           schema:
             type: object
             properties:
