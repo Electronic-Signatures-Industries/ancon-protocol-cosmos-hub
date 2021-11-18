@@ -42,7 +42,7 @@ cat $HOME/.gaia/config/genesis.json | jq '.app_state["mint"]["params"]["mint_den
 
 
 # Allocate genesis accounts (cosmos formatted addresses)
-# ~/go/bin/gaiad add-genesis-account evmos1plc66geee3un5377d0ltyphyvrpdhsez9l7jr2 100000000000000000000000000aphoton --keyring-backend $KEYRING  --home ~/.gaia
+~/go/bin/gaiad add-genesis-account cosmos1ngfkr3wzm7a890kuweuwezg62jzydsprl7dmv8 100000000000000000000000000uatom --keyring-backend $KEYRING  --home ~/.gaia
 ~/go/bin/gaiad add-genesis-account $KEY 100000000000000000000000000uatom --keyring-backend $KEYRING
 # Sign genesis transaction
 ~/go/bin/gaiad gentx $KEY 1000000000000000000000uatom  --keyring-backend $KEYRING --chain-id $CHAINID
