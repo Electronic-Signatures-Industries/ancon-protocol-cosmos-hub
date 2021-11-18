@@ -3,7 +3,7 @@ module github.com/cosmos/gaia/v6
 go 1.17
 
 require (
-	github.com/Electronic-Signatures-Industries/ancon-protocol v0.0.0-20211118153305-2bbdab492ea0
+	github.com/Electronic-Signatures-Industries/ancon-protocol v0.0.0-20211118185811-ced1e03ce370
 	github.com/cosmos/cosmos-sdk v0.44.3
 	github.com/cosmos/ibc-go/v2 v2.0.0
 	github.com/gorilla/mux v1.8.0
