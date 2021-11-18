@@ -3,7 +3,7 @@ module github.com/cosmos/gaia/v6
 go 1.17
 
 require (
-	github.com/Electronic-Signatures-Industries/ancon-protocol v0.0.0-20211109232705-168db00119fa
+	github.com/Electronic-Signatures-Industries/ancon-protocol v0.0.0-20211118153305-2bbdab492ea0
 	github.com/cosmos/cosmos-sdk v0.44.3
 	github.com/cosmos/ibc-go/v2 v2.0.0
 	github.com/gorilla/mux v1.8.0
@@ -87,14 +87,15 @@ require (
 	github.com/improbable-eng/grpc-web v0.14.1 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/ipfs/go-cid v0.1.0 // indirect
-	github.com/ipld/go-ipld-prime v0.12.2 // indirect
-	github.com/itchyny/base58-go v0.2.0 // indirect
+	github.com/ipfs/go-graphsync v0.9.3 // indirect
+	github.com/ipld/go-codec-dagpb v1.3.0 // indirect
+	github.com/ipld/go-ipld-prime v0.14.0 // indirect
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
 	github.com/keybase/go-keychain v0.0.0-20190712205309-48d3d31d256d // indirect
 	github.com/kilic/bls12-381 v0.1.1-0.20210503002446-7b7597926c69 // indirect
 	github.com/klauspost/compress v1.11.9 // indirect
-	github.com/klauspost/cpuid/v2 v2.0.8 // indirect
+	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/lib/pq v1.10.2 // indirect
 	github.com/libp2p/go-buffer-pool v0.0.2 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
@@ -113,7 +114,7 @@ require (
 	github.com/multiformats/go-base36 v0.1.0 // indirect
 	github.com/multiformats/go-multibase v0.0.3 // indirect
 	github.com/multiformats/go-multicodec v0.3.0 // indirect
-	github.com/multiformats/go-multihash v0.0.15 // indirect
+	github.com/multiformats/go-multihash v0.1.0 // indirect
 	github.com/multiformats/go-varint v0.0.6 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/palantir/stacktrace v0.0.0-20161112013806-78658fd2d177 // indirect
@@ -136,6 +137,7 @@ require (
 	github.com/rs/zerolog v1.25.0 // indirect
 	github.com/sasha-s/go-deadlock v0.2.1-0.20190427202633-1595213edefa // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
+	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
@@ -173,6 +175,7 @@ require (
 	gopkg.in/olebedev/go-duktape.v3 v3.0.0-20200619000410-60c24ae608a6 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	lukechampine.com/blake3 v1.1.6 // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
 )
 
