@@ -67,7 +67,7 @@ cp config.toml $HOME/.gaia/config/config.toml
 
 
 # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-~/go/bin/gaiad start --log_level $LOGLEVEL
+~/go/bin/gaiad start --log_level $LOGLEVEL --trace
 
 #~/go/bin/gaiad tx bank send ethm1jrclh4kgf3467e9aueudn9fflaz04mftahgun3 ancon1x23pcxakulpq74r7jv948kk90apv6f0kpzgp83 10000aphoton
 #~/go/bin/gaiad tx bank send ethm1jrclh4kgf3467e9aueudn9fflaz04mftahgun3 ethm1yf7eqee4l9hen2g3q799j92k638e98lfq84635 10000aphoton
