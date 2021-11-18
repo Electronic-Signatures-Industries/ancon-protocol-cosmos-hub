@@ -6,8 +6,6 @@ require (
 	github.com/Electronic-Signatures-Industries/ancon-protocol v0.0.0-20211117210418-f661283dddd8
 	github.com/cosmos/cosmos-sdk v0.44.3
 	github.com/gorilla/mux v1.8.0
-	github.com/gravity-devs/liquidity v1.2.9
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rakyll/statik v0.1.7
 	github.com/spf13/cast v1.4.1
