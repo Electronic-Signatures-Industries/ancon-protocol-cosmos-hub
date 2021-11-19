@@ -3,11 +3,11 @@ module github.com/cosmos/gaia/v6
 go 1.17
 
 require (
-	github.com/Electronic-Signatures-Industries/ancon-protocol v0.0.0-20211118212812-4c25ed301b89
+	github.com/Electronic-Signatures-Industries/ancon-protocol v0.0.0-20211119203029-49bdb29d3292
 	github.com/cosmos/cosmos-sdk v0.44.3
 	github.com/cosmos/ibc-go/v2 v2.0.0
 	github.com/gorilla/mux v1.8.0
-	github.com/gravity-devs/liquidity v1.4.1
+	github.com/gravity-devs/liquidity v1.4.2
 	github.com/rakyll/statik v0.1.7
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/cobra v1.2.1
