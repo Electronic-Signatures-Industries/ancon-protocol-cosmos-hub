@@ -15,51 +15,51 @@ MNEMONICB="concert negative cry purse shed chest daughter knock success august a
 command -v jq > /dev/null 2>&1 || { echo >&2 "jq not installed. More info: https://stedolan.github.io/jq/download/"; exit 1; }
 
 # remove existing daemon and client
-rm -rf ~/.ancond*
+rm -rf ~/.ancon*
 
 ~/go/bin/ancond config keyring-backend $KEYRING
 ~/go/bin/ancond config chain-id $CHAINID
 
 # if $KEY exists it should be deleted
-(echo $MNEMONICA) | ~/go/bin/ancond keys add $KEY --keyring-backend $KEYRING --recover  --home ~/.ancond
+(echo $MNEMONICA) | ~/go/bin/ancond keys add $KEY --keyring-backend $KEYRING --recover  --home ~/.ancon
 #(echo $MNEMONICA)| ~/go/bin/ancond keys add alice --keyring-backend $KEYRING --algo $KEYALGO --recover
 #(echo $MNEMONICB)| ~/go/bin/ancond keys add bob --keyring-backend $KEYRING --algo $KEYALGO --recover
 
 # Set moniker and chain-id for Ethermint (Moniker can be anything, chain-id must be an integer)
-~/go/bin/ancond init $MONIKER --chain-id $CHAINID  --home ~/.ancond
+~/go/bin/ancond init $MONIKER --chain-id $CHAINID  --home ~/.ancon
 
 # Change parameter token denominations to aphoton
-cat $HOME/.ancond/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="uatom"' > $HOME/.ancond/config/tmp_genesis.json && mv $HOME/.ancond/config/tmp_genesis.json $HOME/.ancond/config/genesis.json
-cat $HOME/.ancond/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="uatom"' > $HOME/.ancond/config/tmp_genesis.json && mv $HOME/.ancond/config/tmp_genesis.json $HOME/.ancond/config/genesis.json
-cat $HOME/.ancond/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="uatom"' > $HOME/.ancond/config/tmp_genesis.json && mv $HOME/.ancond/config/tmp_genesis.json $HOME/.ancond/config/genesis.json
-cat $HOME/.ancond/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="uatom"' > $HOME/.ancond/config/tmp_genesis.json && mv $HOME/.ancond/config/tmp_genesis.json $HOME/.ancond/config/genesis.json
+cat $HOME/.ancon/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="uatom"' > $HOME/.ancon/config/tmp_genesis.json && mv $HOME/.ancon/config/tmp_genesis.json $HOME/.ancon/config/genesis.json
+cat $HOME/.ancon/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="uatom"' > $HOME/.ancon/config/tmp_genesis.json && mv $HOME/.ancon/config/tmp_genesis.json $HOME/.ancon/config/genesis.json
+cat $HOME/.ancon/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="uatom"' > $HOME/.ancon/config/tmp_genesis.json && mv $HOME/.ancon/config/tmp_genesis.json $HOME/.ancon/config/genesis.json
+cat $HOME/.ancon/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="uatom"' > $HOME/.ancon/config/tmp_genesis.json && mv $HOME/.ancon/config/tmp_genesis.json $HOME/.ancon/config/genesis.json
 
 # increase block time (?)
-# cat $HOME/.ancond/config/genesis.json | jq '.consensus_params["block"]["time_iota_ms"]="1000"' > $HOME/.ancond/config/tmp_genesis.json && mv $HOME/.ancond/config/tmp_genesis.json $HOME/.ancond/config/genesis.json
+# cat $HOME/.ancon/config/genesis.json | jq '.consensus_params["block"]["time_iota_ms"]="1000"' > $HOME/.ancon/config/tmp_genesis.json && mv $HOME/.ancon/config/tmp_genesis.json $HOME/.ancon/config/genesis.json
 
 # Set gas limit in genesis
-# cat $HOME/.ancond/config/genesis.json | jq '.consensus_params["block"]["max_gas"]="10000000"' > $HOME/.ancond/config/tmp_genesis.json && mv $HOME/.ancond/config/tmp_genesis.json $HOME/.ancond/config/genesis.json
+# cat $HOME/.ancon/config/genesis.json | jq '.consensus_params["block"]["max_gas"]="10000000"' > $HOME/.ancon/config/tmp_genesis.json && mv $HOME/.ancon/config/tmp_genesis.json $HOME/.ancon/config/genesis.json
 
 
 # Allocate genesis accounts (cosmos formatted addresses)
-~/go/bin/ancond add-genesis-account cosmos1ngfkr3wzm7a890kuweuwezg62jzydsprl7dmv8 100000000000000000000000000uatom --keyring-backend $KEYRING  --home ~/.ancond
-~/go/bin/ancond add-genesis-account $KEY 100000000000000000000000000uatom --keyring-backend $KEYRING  --home ~/.ancond
+~/go/bin/ancond add-genesis-account cosmos1ngfkr3wzm7a890kuweuwezg62jzydsprl7dmv8 100000000000000000000000000uatom --keyring-backend $KEYRING  --home ~/.ancon
+~/go/bin/ancond add-genesis-account $KEY 100000000000000000000000000uatom --keyring-backend $KEYRING  --home ~/.ancon
 # Sign genesis transaction
-~/go/bin/ancond gentx $KEY 1000000000000000000000uatom  --keyring-backend $KEYRING --chain-id $CHAINID  --home ~/.ancond
+~/go/bin/ancond gentx $KEY 1000000000000000000000uatom  --keyring-backend $KEYRING --chain-id $CHAINID  --home ~/.ancon
 
 # Collect genesis tx
-~/go/bin/ancond collect-gentxs  --home ~/.ancond
+~/go/bin/ancond collect-gentxs  --home ~/.ancon
 
 # Run this to ensure everything worked and that the genesis file is setup correctly
-~/go/bin/ancond validate-genesis  --home ~/.ancond
+~/go/bin/ancond validate-genesis  --home ~/.ancon
 
 if [[ $1 == "pending" ]]; then
   echo "pending mode is on, please wait for the first block committed."
 fi
 
-cp app.toml $HOME/.ancond/config/app.toml
+cp app.toml $HOME/.ancon/config/app.toml
 
-cp config.toml $HOME/.ancond/config/config.toml
+cp config.toml $HOME/.ancon/config/config.toml
 
 
 #~/go/bin/ancond keys show alice | echo
