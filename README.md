@@ -1,8 +1,8 @@
-# Ancon Protocol Cosmos Hub (Gaia) chain build
+# Ancon Protocol - Tensta testnet
 
 <img  src="https://raw.githubusercontent.com/Electronic-Signatures-Industries/ancon-protocol/main/specs/AnconProtocoLogo.jpg" align="center" width="250" />
 
-## Running an Ancon Protocol v0.2.4 module with Gaia v6.0.0 / Vega testnet
+## Running an Ancon Protocol v0.3.0-rc.1 aka Data Contract
 
 ### Compile
 
@@ -11,20 +11,16 @@
 1. Clone `https://github.com/Electronic-Signatures-Industries/ancon-protocol-cosmos-hub`
 2. Download Starport
 3. Run `starport chain build`
-4. Copy `go/bin/gaiad` to `/usr/local/bin`
+4. Copy `go/bin/ancond` to `/usr/local/bin/ancond`
 
 ### Running Your Own Full-Node
 
-> Note: Requires Vega Upgrade to be live on testnet
+> Note: Unstable as we are making updates and learning the chain ops process
 
-1. Clean any existing files `rm -rf .gaia/`
-2. Create keys or  use existing
-   `gaiad keys add mykey -i --keyring-backend file`
-3. Initialize
-   `gaiad init mynode --chain-id vega-testnet`
-4. Copy `app.toml` and `config.toml` to `.gaia/config`
-5. Extract `gen.zip` to `.gaia/config/genesis.json`
-6. Run `gaiad start --x-crisis-skip-assert-invariants`
+1. Clean any existing files `rm -rf .ancon/`
+2. Add `04aefa14511fa744965b95221528585351d74959@ancon.did.pa:26656` to config.toml
+3. Download genesis.json and unpack data folder
+4. Run `ancond start`
 
 ### Staking information
 
