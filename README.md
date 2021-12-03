@@ -1,4 +1,4 @@
-# Ancon Protocol - Tensta testnet
+# Ancon Protocol - Tensta testnet  deprecated!
 
 <img  src="https://raw.githubusercontent.com/Electronic-Signatures-Industries/ancon-protocol/main/specs/AnconProtocoLogo.jpg" align="center" width="250" />
 
